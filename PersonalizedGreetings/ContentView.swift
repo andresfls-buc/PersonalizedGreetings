@@ -17,10 +17,10 @@ struct ContentView: View {
     
     var greeting: String {
         guard !userName.trimmingCharacters(in: .whitespaces).isEmpty else {
-            return "Por favor, introduce tu nombre"
+            return "Por favor, ingresa tu nombre."
         }
+
         let title: String
-     
 
         switch selectedLanguage {
         case "Español":
@@ -30,7 +30,7 @@ struct ContentView: View {
             title = selectedGender == "Masculino" ? "Mister" : "Miss"
             return "Hello, \(title) \(userName)"
         case "Japonés":
-            title = selectedGender == "Masculino" ? "様 " : "様 "
+            title = "様 "
             return "こんにちは、\(userName)\(title)"
         default:
             return "Hola"
@@ -38,36 +38,52 @@ struct ContentView: View {
     }
     
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 20) {
             Text("Escribe tu nombre")
                 .font(.headline)
-            
-            TextField("Nombre", text: $userName)
+
+            TextField("Tu nombre aquí", text: $userName)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
             
             Text("Selecciona tu idioma")
                 .font(.headline)
             
-            Picker("Idioma", selection: $selectedLanguage) {
+            HStack {
                 ForEach(languages, id: \.self) { lang in
-                    Text(lang)
+                    Button(action: {
+                        selectedLanguage = lang
+                    }) {
+                        Text(lang)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 12)
+                            .background(selectedLanguage == lang ? Color.blue : Color.gray.opacity(0.2))
+                            .foregroundColor(selectedLanguage == lang ? .white : .primary)
+                            .cornerRadius(10)
+                    }
                 }
             }
-            .pickerStyle(SegmentedPickerStyle())
-            
+
             Text("Selecciona tu género")
                 .font(.headline)
             
-            Picker("Género", selection: $selectedGender) {
+            HStack {
                 ForEach(genders, id: \.self) { gender in
-                    Text(gender)
+                    Button(action: {
+                        selectedGender = gender
+                    }) {
+                        Text(gender)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 12)
+                            .background(selectedGender == gender ? Color.blue : Color.gray.opacity(0.2))
+                            .foregroundColor(selectedGender == gender ? .white : .primary)
+                            .cornerRadius(10)
+                    }
                 }
             }
-            .pickerStyle(SegmentedPickerStyle())
             
             Text(greeting)
-                .font(.largeTitle)
+                .font(.title2)
                 .padding()
                 .multilineTextAlignment(.center)
         }
@@ -78,4 +94,3 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
-
